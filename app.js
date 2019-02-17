@@ -27,10 +27,21 @@ class Ball extends Paddle {
     }
 }
 
+const drawObj = (collisionObj, context) => {
+    collisionObj.forEach(collisionObj => {
+        console.log(collisionObj);
+        context.fillStyle = collisionObj.color;
+        context.fillRect(collisionObj.posX, collisionObj.posY, collisionObj.width, collisionObj.height)
+    });
+}
 
+const   player1 = new Paddle(10, cnv.height / 2 - 100 / 2, 20, 100, 'green'),
+        player2 = new Paddle(cnv.width-30,cnv.height / 2 - 100 / 2, 20, 100, 'green'),
+        pilka = new Ball(cnv.width / 2 - 3,cnv.height / 2 - 3, 6, 6, 'red');
 
-const player = new Paddle(10,10,5,20,'white'),
-    pilka = new Ball(4,4,2,2,'red');
+const collisionObj = [];
+collisionObj.push(player1, player2, pilka);
 
-console.log(player);
-console.log(pilka);
+drawObj(collisionObj, ctx);
+
+console.log(collisionObj);

@@ -25,6 +25,7 @@ class Paddle {
 class Ball extends Paddle {
     constructor(size, color, posX, posY) {
         super(null, null, color, posX, posY);
+        this.size = size;
         this.width = size;
         this.height = size;
         this.middleHeight = size / 2;
@@ -33,13 +34,26 @@ class Ball extends Paddle {
         this.directionX = true;
         this.directionY = true;
     }
+    drawArc(arr, context) {
+        arr.forEach(el => {
+            context.fillStyle = el.color;
+            context.beginPath();
+            context.arc(el.posX,el.posY,el.size,0,2*Math.PI);
+            context.closePath();
+            context.fill();
+        });
+    }
 }
 
 const   player = new Paddle(20, 100, 'green', 10, cnv.height / 2 - 100 / 2),
         computer = new Paddle(20, 100, 'red', cnv.width-30,cnv.height / 2 - 100 / 2),
-        ball = new Ball(20, 'black', cnv.width / 2 - 3,cnv.height / 2 - 3);
+        ball = new Ball(20, 'black', cnv.width / 2 - 10,cnv.height / 2 - 10);
 
-const collisionObj = [];
-collisionObj.push(player, computer, ball);
+const paddleObj = [];
+const ballsObj = [];
 
-player.draw(collisionObj, ctx);
+paddleObj.push(player, computer);
+ballsObj.push(ball);
+
+ball.drawArc(ballsObj, ctx);
+player.draw(paddleObj, ctx);

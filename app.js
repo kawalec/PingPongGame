@@ -23,8 +23,11 @@ class Paddle {
 }
 
 class Ball extends Paddle {
-    constructor(width, height, color, posX, posY) {
-        super(width, height, color, posX, posY);
+    constructor(size, color, posX, posY) {
+        super(null, null, color, posX, posY);
+        this.width = size;
+        this.height = size;
+        this.middleHeight = size / 2;
         this.speedX = 2;
         this.speedY = 2;
         this.directionX = true;
@@ -33,12 +36,10 @@ class Ball extends Paddle {
 }
 
 const   player = new Paddle(20, 100, 'green', 10, cnv.height / 2 - 100 / 2),
-        computer = new Paddle(20, 100, 'green', cnv.width-30,cnv.height / 2 - 100 / 2),
-        ball = new Ball(20, 20, 'red', cnv.width / 2 - 3,cnv.height / 2 - 3);
+        computer = new Paddle(20, 100, 'red', cnv.width-30,cnv.height / 2 - 100 / 2),
+        ball = new Ball(20, 'black', cnv.width / 2 - 3,cnv.height / 2 - 3);
 
 const collisionObj = [];
 collisionObj.push(player, computer, ball);
 
 player.draw(collisionObj, ctx);
-
-console.log(collisionObj);

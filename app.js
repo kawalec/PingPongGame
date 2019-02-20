@@ -54,5 +54,19 @@ const   player = new Paddle(20, 100, 'green', 10, cnv.height / 2 - 100 / 2),
 players.push(player, computer);
 balls.push(ball);
 
-Paddle.draw(players, ctx);
-Ball.drawArc(balls, ctx);
+
+const bMove = (arr) => {
+    
+}
+
+const clearScreen = () => {
+    ctx.clearRect(0, 0, cnv.width, cnv.height);
+}
+
+const run = () => {
+    clearScreen();
+    Paddle.draw(players, ctx);
+    Ball.drawArc(balls, ctx);
+};
+
+let timer = setInterval(run, 1000 / 60);

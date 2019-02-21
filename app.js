@@ -43,20 +43,60 @@ class Ball extends Paddle {
             context.fill();
         });
     }
+    move = collisionObj => {
+        let collision = 0;
+        const ballL = this.posX,
+              ballR = this.posX + this.width,
+              ballT = this.posY,
+              ballB = this.posY + this.height;
+
+        for(let i = 1; i < collisionObj.length; i++) {
+            let objL = collisionObj[i].posX,
+                objR = collisionObj[i].posx + collisionObj[i].width,
+                objT = collisionObj[i].posY,
+                objB = collisionObj[i].posY + collisionObj[i].height;
+            if(this === collisionObj[i]) {  // pomijamy kolizie z samym sobą
+                continue;
+            } else if(((objL <= ballL && ballL <= objR) || (objL <= ballR && ballR <= objR)) && ((objT <= ballT && ballT <= objB) || (objT <= ballB && ballB <= objB))) {   // pomijamy początkowy moment zawierania się objektów w sobie
+                this.directionX = !this.directionX;
+                break;
+            } 
+            if (this.directionX && this.directionY) {
+                if ((ballL < objR && ((objL <= ballR + this.speedX && ballR + this.speedX <= objR) || (objL <= ballL + this.speedX && ballL + this.speedX <= objR))) && (ballT < objB && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB + this.speedY && ballB + this.speedY <= objB)))) {
+                    break;
+                }
+            } else if (this.directionX && !this.directionY) {
+                if ((ballL < objR && ((objL <= ballR + this.speedX && ballR + this.speedX <= objR) || (objL <= ballL + this.speedX && ballL + this.speedX <= objR))) && (ballB > objT && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB - this.speedY && ballB - this.speedY <= objB)))) {
+                    break;
+                }
+            } else if (!this.directionX && this.directionY) {
+                if ((ballR > objL && ((objL <= ballR - this.speedX && ballR - this.speedX <= objR) || (objL <= ballL - this.speedX && ballL - this.speedX <= objR))) && (ballT < objB && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB + this.speedY && ballB + this.speedY <= objB)))) {
+                    break;
+                }
+            } else {
+                if ((ballR > objL && ((objL <= ballR - this.speedX && ballR - this.speedX <= objR) || (objL <= ballL - this.speedX && ballL - this.speedX <= objR))) && (ballB > objT && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB - this.speedY && ballB - this.speedY <= objB)))) {
+                    break;
+                }
+            }
+        }
+    }
 }
 
 const   player = new Paddle(20, 100, 'green', 10, cnv.height / 2 - 100 / 2),
         computer = new Paddle(20, 100, 'red', cnv.width-30,cnv.height / 2 - 100 / 2),
         ball = new Ball(20, 'black', cnv.width / 2 - 10,cnv.height / 2 - 10),
+        collisionObj = [],
         players = [],
         balls = [];
 
 players.push(player, computer);
 balls.push(ball);
+collisionObj.concat(players, balls);
 
-
-const bMove = (arr) => {
-    
+const ballMove = balls => {
+    balls.forEach(balls => {
+        balls.move(collisionObj);
+    });
 }
 
 const clearScreen = () => {
@@ -65,6 +105,7 @@ const clearScreen = () => {
 
 const run = () => {
     clearScreen();
+    ballMove(balls);
     Paddle.draw(players, ctx);
     Ball.drawArc(balls, ctx);
 };

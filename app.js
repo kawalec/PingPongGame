@@ -61,20 +61,40 @@ class Ball extends Paddle {
                 this.directionX = !this.directionX;
                 break;
             } 
-            if (this.directionX && this.directionY) {
+            if(this.directionX && (ballR + this.speedX > canvas.width)) {
+                collision = 2;
+                playerPoints++;
+                break;
+            } else if (!this.directionX && (ballL - this.speedX < 0)) {
+                collision = 2;
+                compterPoints++;
+                break;
+            }
+            if(this.directionY && (ballB + this.speedY > canvas.height)) {
+                collision = 3;
+                break;
+            } else if(!this.directionY && (ballT - this.speedY < 0)) {
+                collision = 3;
+                break;
+            }
+            if(this.directionX && this.directionY) {
                 if ((ballL < objR && ((objL <= ballR + this.speedX && ballR + this.speedX <= objR) || (objL <= ballL + this.speedX && ballL + this.speedX <= objR))) && (ballT < objB && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB + this.speedY && ballB + this.speedY <= objB)))) {
+                    collision = 1;
                     break;
                 }
-            } else if (this.directionX && !this.directionY) {
-                if ((ballL < objR && ((objL <= ballR + this.speedX && ballR + this.speedX <= objR) || (objL <= ballL + this.speedX && ballL + this.speedX <= objR))) && (ballB > objT && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB - this.speedY && ballB - this.speedY <= objB)))) {
+            } else if(this.directionX && !this.directionY) {
+                if((ballL < objR && ((objL <= ballR + this.speedX && ballR + this.speedX <= objR) || (objL <= ballL + this.speedX && ballL + this.speedX <= objR))) && (ballB > objT && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB - this.speedY && ballB - this.speedY <= objB)))) {
+                    collision = 1;
                     break;
                 }
-            } else if (!this.directionX && this.directionY) {
+            } else if(!this.directionX && this.directionY) {
                 if ((ballR > objL && ((objL <= ballR - this.speedX && ballR - this.speedX <= objR) || (objL <= ballL - this.speedX && ballL - this.speedX <= objR))) && (ballT < objB && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB + this.speedY && ballB + this.speedY <= objB)))) {
+                    collision = 1;
                     break;
                 }
             } else {
-                if ((ballR > objL && ((objL <= ballR - this.speedX && ballR - this.speedX <= objR) || (objL <= ballL - this.speedX && ballL - this.speedX <= objR))) && (ballB > objT && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB - this.speedY && ballB - this.speedY <= objB)))) {
+                if((ballR > objL && ((objL <= ballR - this.speedX && ballR - this.speedX <= objR) || (objL <= ballL - this.speedX && ballL - this.speedX <= objR))) && (ballB > objT && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB - this.speedY && ballB - this.speedY <= objB)))) {
+                    collision = 1;
                     break;
                 }
             }

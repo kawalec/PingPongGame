@@ -11,7 +11,7 @@ class Paddle {
         this.color = color;
         this.posX = posX;
         this.posY = posY;
-        this.speedY = 3;
+        this.speedY = 1;
         this.middleHeight = height / 2;
     }
     static draw(arr, context) {
@@ -43,14 +43,15 @@ class Ball extends Paddle {
             context.fill();
         });
     }
-    move = collisionObj => {
+
+    move(collisionObj) {
         let collision = 0;
         const ballL = this.posX,
               ballR = this.posX + this.width,
               ballT = this.posY,
               ballB = this.posY + this.height;
 
-        for(let i = 1; i < collisionObj.length; i++) {
+        for(let i = 0; i < collisionObj.length; i++) {
             let objL = collisionObj[i].posX,
                 objR = collisionObj[i].posx + collisionObj[i].width,
                 objT = collisionObj[i].posY,
@@ -61,16 +62,16 @@ class Ball extends Paddle {
                 this.directionX = !this.directionX;
                 break;
             } 
-            if(this.directionX && (ballR + this.speedX > canvas.width)) {
+            if(this.directionX && (ballR + this.speedX > cnv.width)) {
                 collision = 2;
-                playerPoints++;
+                // playerPoints++;
                 break;
             } else if (!this.directionX && (ballL - this.speedX < 0)) {
                 collision = 2;
-                compterPoints++;
+                // compterPoints++;
                 break;
             }
-            if(this.directionY && (ballB + this.speedY > canvas.height)) {
+            if(this.directionY && (ballB + this.speedY > cnv.height)) {
                 collision = 3;
                 break;
             } else if(!this.directionY && (ballT - this.speedY < 0)) {
@@ -99,6 +100,31 @@ class Ball extends Paddle {
                 }
             }
         }
+
+        if(collision) {
+            this.speedX += .1;
+            this.speedY += .1;
+            if(collision == 1) {
+                this.directionX = !this.directionX;
+                this.directionY = !this.directionY;
+            } else if(collision == 2) {
+                this.posX = cnv.width / 2 - 10;
+                this.posY = cnv.height / 2 - 10;
+            } else if(collision == 3) {
+                this.directionY = !this.directionY;
+            }
+        } else {
+            if(this.directionX) {
+                this.posX += this.speedX;
+            } else {
+                this.posX -= this.speedX;
+            }
+            if(this.directionY) {
+                this.posY += this.speedY;
+            } else {
+                this.posY -= this.speedY;
+            }
+        }
     }
 }
 
@@ -111,17 +137,18 @@ const   player = new Paddle(20, 100, 'green', 10, cnv.height / 2 - 100 / 2),
 
 players.push(player, computer);
 balls.push(ball);
-collisionObj.concat(players, balls);
-
-const ballMove = balls => {
-    balls.forEach(balls => {
-        balls.move(collisionObj);
-    });
-}
+collisionObj.push(player, computer, ball);
 
 const clearScreen = () => {
     ctx.clearRect(0, 0, cnv.width, cnv.height);
 }
+
+const ballMove = balls => {
+    balls.forEach(el => {
+        el.move(collisionObj);
+    });
+}
+
 
 const run = () => {
     clearScreen();

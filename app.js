@@ -131,12 +131,16 @@ class Ball extends Paddle {
 const   player = new Paddle(20, 100, 'green', 10, cnv.height / 2 - 100 / 2),
         computer = new Paddle(20, 100, 'red', cnv.width-30,cnv.height / 2 - 100 / 2),
         ball = new Ball(20, 'black', cnv.width / 2 - 10,cnv.height / 2 - 10),
+        ball1 = new Ball(20, 'red', cnv.width / 4 - 10,cnv.height / 3 - 10),
+        ball2 = new Ball(20, 'green', cnv.width / 4 - 10,cnv.height / 6 - 10),
+        ball3 = new Ball(20, 'orange', cnv.width / 6 - 10,cnv.height / 5 - 10),
+        ball4 = new Ball(20, 'yellow', cnv.width / 3 - 10,cnv.height / 6 - 10),
         collisionObj = [],
         players = [],
         balls = [];
 
 players.push(player, computer);
-balls.push(ball);
+balls.push(ball, ball1, ball2, ball3, ball4);
 collisionObj.push(player, computer, ball);
 
 const clearScreen = () => {

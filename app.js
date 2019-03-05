@@ -130,7 +130,7 @@ class Ball extends Paddle {
 
 const   player = new Paddle(20, 500, 'green', 10, 0),
         computer = new Paddle(20, 500, 'red', cnv.width-30, 0),
-        ball = new Ball(20, 'black', cnv.width / 2 - 10, cnv.height / 2 - 10),
+        ball = new Ball(15, 'black', cnv.width / 2 - 10, cnv.height / 2 - 10),
         collisionObj = [],
         players = [],
         balls = [];
@@ -146,18 +146,22 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+function randomColor() {
+    return "#" + Math.random().toString(16).slice(2,8);
+}
+
 const addMoreBalls = (num) => {
     for(let i=0; i<=num; i++) {
         let ball = 'ball'+num,
-        bx = getRandomInt(100, 900);
-        by = getRandomInt(100, 400);
-        ball = new Ball(20, 'red', bx, by);
+        bx = getRandomInt(100, 900),
+        by = getRandomInt(100, 400),
+        color = randomColor();
+        ball = new Ball(15, color, bx, by);
         balls.push(ball);
         collisionObj.push(ball);
     }
 } 
-addMoreBalls(5);
-
+addMoreBalls(20);
 
 
 const clearScreen = () => {

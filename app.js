@@ -65,12 +65,12 @@ class Ball extends Paddle {
             if(this.directionX && (ballR + this.speedX > cnv.width)) {
                 collision = 2;
                 playerPoints++;
-                playerScoreBoard.setPoints(playerPoints);
+                playerScoreBoard.setPoints = playerPoints;
                 break;
             } else if (!this.directionX && (ballL - this.speedX < 0)) {
                 collision = 2;
                 compterPoints++;
-                computerScoreBoard.setPoints(compterPoints);
+                computerScoreBoard.setPoints = compterPoints;
                 break;
             }
             if(this.directionY && (ballB + this.speedY > cnv.height)) {
@@ -142,11 +142,11 @@ class Score {
         this.height = 30;
         this.color = 'black';
     }
-    setPoints(points) {
+    set setPoints(points) {
         this.points = points;
     }
-    getPoints() {
-        return points;
+    get getPoints() {
+        return this.points;
     }
     resetPoints() {
         this.points = 0;

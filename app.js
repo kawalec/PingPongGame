@@ -128,8 +128,8 @@ class Ball extends Paddle {
     }
 }
 
-const   player = new Paddle(20, 500, 'green', 10, 0),
-        computer = new Paddle(20, 500, 'red', cnv.width-30, 0),
+const   player = new Paddle(20, 100, 'green', 10, 200),
+        computer = new Paddle(20, 100, 'red', cnv.width-30, 200),
         ball = new Ball(15, 'black', cnv.width / 2 - 10, cnv.height / 2 - 10),
         collisionObj = [],
         players = [],
@@ -140,32 +140,46 @@ balls.push(ball);
 collisionObj.push(player, computer, ball);
 
 
-function getRandomInt(min, max) {
+let getRandomInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
-function randomColor() {
+let getRandomColor = () => {
     return "#" + Math.random().toString(16).slice(2,8);
 }
 
-const addMoreBalls = (num) => {
-    for(let i=0; i<=num; i++) {
-        let ball = 'ball'+num,
-        bx = getRandomInt(100, 900),
-        by = getRandomInt(100, 400),
-        color = randomColor();
-        ball = new Ball(15, color, bx, by);
-        balls.push(ball);
-        collisionObj.push(ball);
-    }
-} 
-addMoreBalls(20);
+let getRandomDirection = (el) => {
+    let num1 = Math.round(Math.random()),
+        num2 = Math.round(Math.random());
+    console.log(`1: ${num1}, 2: ${num2}`);
+    el.directionX = num1;
+    el.directionY = num2;
+}
+
+// const addMoreBalls = (num) => {
+//     for(let i=0; i<num; i++) {
+//         let ball = 'ball'+num,
+//         bx = getRandomInt(40, 960),
+//         by = getRandomInt(10, 490),
+//         color = getRandomColor();
+//         ball = new Ball(15, color, bx, by);
+//         balls.push(ball);
+//         collisionObj.push(ball);
+//     }
+// } 
+// addMoreBalls(100);
 
 
 const clearScreen = () => {
     ctx.clearRect(0, 0, cnv.width, cnv.height);
+}
+
+const ballFirstMove = balls => {
+    balls.forEach(el => {
+        getRandomDirection(el);
+    })
 }
 
 const ballMove = balls => {
@@ -173,8 +187,7 @@ const ballMove = balls => {
         el.move(collisionObj);
     });
 }
-
-
+ballFirstMove(balls);
 const run = () => {
     clearScreen();
     ballMove(balls);

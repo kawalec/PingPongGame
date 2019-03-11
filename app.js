@@ -64,13 +64,11 @@ class Ball extends Paddle {
             } 
             if(this.directionX && (ballR + this.speedX > cnv.width)) {
                 collision = 2;
-                playerPoints++;
-                playerScoreBoard.setPoints = playerPoints;
+                playerScoreBoard.setPoints = playerScoreBoard.points + 1;
                 break;
             } else if (!this.directionX && (ballL - this.speedX < 0)) {
                 collision = 2;
-                compterPoints++;
-                computerScoreBoard.setPoints = compterPoints;
+                computerScoreBoard.setPoints = computerScoreBoard.points + 1;
                 break;
             }
             if(this.directionY && (ballB + this.speedY > cnv.height)) {
@@ -142,16 +140,15 @@ class Score {
         this.height = 30;
         this.color = 'black';
     }
-    set setPoints(points) {
-        this.points = points;
-    }
     get getPoints() {
         return this.points;
     }
-    resetPoints() {
+    set setPoints(points) {
+        this.points = points;
+    }
+    set resetPoints(e) {
         this.points = 0;
     }
-
     draw(context) {
         context.beginPath();
         context.lineWidth = '1';
@@ -171,9 +168,6 @@ const   player = new Paddle(20, 10, 'green', 10, 200),
         collisionObj = [],
         playerScoreBoard = new Score(20, 20),
         computerScoreBoard = new Score(cnv.width - 70, 20);
-
-let playerPoints = 0, 
-    compterPoints = 0;
 
 players.push(player, computer);
 balls.push(ball);

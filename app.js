@@ -64,11 +64,13 @@ class Ball extends Paddle {
             } 
             if(this.directionX && (ballR + this.speedX > cnv.width)) {
                 collision = 2;
-                // playerPoints++;
+                playerPoints++;
+                playerScoreBoard.setPoints(playerPoints);
                 break;
             } else if (!this.directionX && (ballL - this.speedX < 0)) {
                 collision = 2;
-                // compterPoints++;
+                compterPoints++;
+                computerScoreBoard.setPoints(compterPoints);
                 break;
             }
             if(this.directionY && (ballB + this.speedY > cnv.height)) {
@@ -108,8 +110,11 @@ class Ball extends Paddle {
                 this.directionX = !this.directionX;
                 this.directionY = !this.directionY;
             } else if(collision == 2) {
-                this.posX = cnv.width / 2 - 10;
-                this.posY = cnv.height / 2 - 10;
+                ballFirstMove(balls);
+                this.speedX = 2;
+                this.speedY = 2;
+                this.posX = cnv.width / 2 - this.size / 2;
+                this.posY = cnv.height / 2 - this.size / 2;
             } else if(collision == 3) {
                 this.directionY = !this.directionY;
             }
@@ -128,17 +133,51 @@ class Ball extends Paddle {
     }
 }
 
-const   player = new Paddle(20, 100, 'green', 10, 200),
-        computer = new Paddle(20, 100, 'red', cnv.width-30, 200),
+class Score {
+    constructor(posX, posY) {
+        this.points = 0;
+        this.posX = posX;
+        this.posY = posY;
+        this.width = 50;
+        this.height = 30;
+        this.color = 'black';
+    }
+    setPoints(points) {
+        this.points = points;
+    }
+    getPoints() {
+        return points;
+    }
+    resetPoints() {
+        this.points = 0;
+    }
+
+    draw(context) {
+        context.beginPath();
+        context.lineWidth = '1';
+        context.strokeStyle = this.color;
+        context.rect(this.posX, this.posY, this.width, this.height);
+        context.font = "28px Roboto";
+        context.fillText(this.points, this.posX + this.width / 3, this.posY + this.height / 1.2);
+        context.stroke();
+    }
+}
+
+const   player = new Paddle(20, 10, 'green', 10, 200),
+        computer = new Paddle(20, 10, 'red', cnv.width-30, 200),
         ball = new Ball(15, 'black', cnv.width / 2 - 10, cnv.height / 2 - 10),
-        collisionObj = [],
         players = [],
-        balls = [];
+        balls = [],
+        collisionObj = [],
+        playerScoreBoard = new Score(20, 20),
+        computerScoreBoard = new Score(cnv.width - 70, 20);
+
+let playerPoints = 0, 
+    compterPoints = 0;
 
 players.push(player, computer);
 balls.push(ball);
 collisionObj.push(player, computer, ball);
-
 
 let getRandomInt = (min, max) => {
     min = Math.ceil(min);
@@ -153,24 +192,9 @@ let getRandomColor = () => {
 let getRandomDirection = (el) => {
     let num1 = Math.round(Math.random()),
         num2 = Math.round(Math.random());
-    console.log(`1: ${num1}, 2: ${num2}`);
     el.directionX = num1;
     el.directionY = num2;
 }
-
-// const addMoreBalls = (num) => {
-//     for(let i=0; i<num; i++) {
-//         let ball = 'ball'+num,
-//         bx = getRandomInt(40, 960),
-//         by = getRandomInt(10, 490),
-//         color = getRandomColor();
-//         ball = new Ball(15, color, bx, by);
-//         balls.push(ball);
-//         collisionObj.push(ball);
-//     }
-// } 
-// addMoreBalls(100);
-
 
 const clearScreen = () => {
     ctx.clearRect(0, 0, cnv.width, cnv.height);
@@ -187,12 +211,14 @@ const ballMove = balls => {
         el.move(collisionObj);
     });
 }
-ballFirstMove(balls);
+
 const run = () => {
     clearScreen();
     ballMove(balls);
     Paddle.draw(players, ctx);
     Ball.drawArc(balls, ctx);
+    playerScoreBoard.draw(ctx);
+    computerScoreBoard.draw(ctx);
 };
 
 let timer = setInterval(run, 1000 / 60);

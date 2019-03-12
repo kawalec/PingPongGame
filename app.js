@@ -21,6 +21,20 @@ class Paddle {
             context.fillRect(el.posX, el.posY, el.width, el.height)
         });
     }
+    moveUp() {
+        this.posY += 1;
+    }
+    moveDown() {
+        this.posY -= 1;
+    }
+    borderMove() {
+        if(this.posY < 0) {
+            this.posY = 0
+        }
+        if(this.posY > cnv.height - this.height) {
+            this.posY = cnv.height - this.height
+        }
+    }
 }
 
 class Ball extends Paddle {
@@ -161,8 +175,8 @@ class Score {
     }
 }
 
-const   player = new Paddle(20, 100, 'green', 10, 200),
-        computer = new Paddle(20, 100, 'red', cnv.width-30, 200),
+const   playerPaddle = new Paddle(20, 100, 'green', 10, 200),
+        computerPaddle = new Paddle(20, 100, 'red', cnv.width-30, 200),
         ball = new Ball(15, 'black', cnv.width / 2 - 10, cnv.height / 2 - 10),
         players = [],
         balls = [],
@@ -171,17 +185,36 @@ const   player = new Paddle(20, 100, 'green', 10, 200),
         computerScoreBoard = new Score(cnv.width - 200, 20);
 
 
-players.push(player, computer);
+players.push(playerPaddle, computerPaddle);
 balls.push(ball);
-collisionObj.push(player, computer, ball);
+collisionObj.push(playerPaddle, computerPaddle, ball);
 
 const mouseMove = ev => {
-    player.posY = ev.clientY - player.height;
-    if(player.posY < 0) {
-        player.posY = 0
+    playerPaddle.posY = ev.clientY - playerPaddle.height;
+    // if(playerPaddle.posY < 0) {
+    //     playerPaddle.posY = 0
+    // }
+    // if(playerPaddle.posY > cnv.height - playerPaddle.height) {
+    //     playerPaddle.posY = cnv.height - playerPaddle.height
+    // }
+}
+
+const computerMove = (balls) => {
+    let minX = cnv.width, 
+        minEl,
+        tmpX;
+
+    for(let i=0; i<balls.length; i++) {
+        tmpX = computerPaddle.posX - balls[i].posX;
+        if(tmpX < minX) {
+            minX = tmpX;
+            minEl = i;
+        }
     }
-    if(player.posY > cnv.height - player.height) {
-        player.posY = cnv.height - player.height
+    if(computerPaddle.posY - computerPaddle.middleHeight > balls[minEl].posY - balls[minEl].middleHeight) {
+        computerPaddle.moveDown();
+    } else {
+        computerPaddle.moveUp();
     }
 }
 
@@ -221,6 +254,9 @@ const ballMove = balls => {
 const run = () => {
     clearScreen();
     ballMove(balls);
+    computerMove(balls);
+    playerPaddle.borderMove();
+    computerPaddle.borderMove();
     Paddle.draw(players, ctx);
     Ball.drawArc(balls, ctx);
     playerScoreBoard.draw(ctx);

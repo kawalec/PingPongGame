@@ -66,7 +66,7 @@ class Ball extends Paddle {
                 collision = 2;
                 playerScoreBoard.setPoints = playerScoreBoard.points + 1;
                 break;
-            } else if (!this.directionX && (ballL - this.speedX < 0)) {
+            } else if(!this.directionX && (ballL - this.speedX < 0)) {
                 collision = 2;
                 computerScoreBoard.setPoints = computerScoreBoard.points + 1;
                 break;
@@ -74,12 +74,12 @@ class Ball extends Paddle {
             if(this.directionY && (ballB + this.speedY > cnv.height)) {
                 collision = 3;
                 break;
-            } else if(!this.directionY && (ballT - this.speedY < 0)) {
+            } else if(!this.directionY && (ballT - this.speedY < 10)) {
                 collision = 3;
                 break;
             }
             if(this.directionX && this.directionY) {
-                if ((ballL < objR && ((objL <= ballR + this.speedX && ballR + this.speedX <= objR) || (objL <= ballL + this.speedX && ballL + this.speedX <= objR))) && (ballT < objB && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB + this.speedY && ballB + this.speedY <= objB)))) {
+                if((ballL < objR && ((objL <= ballR + this.speedX && ballR + this.speedX <= objR) || (objL <= ballL + this.speedX && ballL + this.speedX <= objR))) && (ballT < objB && ((objT <= ballT - this.speedY && ballT - this.speedY <= objB) || (objT <= ballB + this.speedY && ballB + this.speedY <= objB)))) {
                     collision = 1;
                     break;
                 }
@@ -160,30 +160,41 @@ class Score {
     }
 }
 
-const   player = new Paddle(20, 10, 'green', 10, 200),
-        computer = new Paddle(20, 10, 'red', cnv.width-30, 200),
+const   player = new Paddle(20, 100, 'green', 10, 200),
+        computer = new Paddle(20, 100, 'red', cnv.width-30, 200),
         ball = new Ball(15, 'black', cnv.width / 2 - 10, cnv.height / 2 - 10),
         players = [],
         balls = [],
         collisionObj = [],
-        playerScoreBoard = new Score(20, 20),
-        computerScoreBoard = new Score(cnv.width - 70, 20);
+        playerScoreBoard = new Score(150, 20),
+        computerScoreBoard = new Score(cnv.width - 200, 20);
+
 
 players.push(player, computer);
 balls.push(ball);
 collisionObj.push(player, computer, ball);
 
-let getRandomInt = (min, max) => {
+const mouseMove = ev => {
+    player.posY = ev.clientY - player.height;
+    if(player.posY < 0) {
+        player.posY = 0
+    }
+    if(player.posY > cnv.height - player.height) {
+        player.posY = cnv.height - player.height
+    }
+}
+
+const getRandomInt = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
-let getRandomColor = () => {
+const getRandomColor = () => {
     return "#" + Math.random().toString(16).slice(2,8);
 }
 
-let getRandomDirection = (el) => {
+const getRandomDirection = (el) => {
     let num1 = Math.round(Math.random()),
         num2 = Math.round(Math.random());
     el.directionX = num1;
@@ -215,4 +226,5 @@ const run = () => {
     computerScoreBoard.draw(ctx);
 };
 
+window.addEventListener('mousemove', mouseMove);
 let timer = setInterval(run, 1000 / 60);

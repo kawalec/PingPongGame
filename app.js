@@ -4,6 +4,7 @@ const ctx = cnv.getContext('2d');
 cnv.width = 1000;
 cnv.height = 500;
 
+
 class Paddle {
     constructor(width, height, color, posX, posY) {
         this.width = width;
@@ -103,7 +104,7 @@ class Ball extends Paddle {
 
         if(collision) {
             this.speedX += .1;
-            this.speedY += .1;
+            this.speedY += .3;
             if(collision == 1) {
                 this.directionX = !this.directionX;
                 this.directionY = !this.directionY;
@@ -224,6 +225,10 @@ const run = () => {
     Ball.drawArc(balls, ctx);
     playerScoreBoard.draw(ctx);
     computerScoreBoard.draw(ctx);
+
+    if (playerScoreBoard.points == 10 || computerScoreBoard.points == 10) {
+        clearInterval(timer);
+    }
 };
 
 window.addEventListener('mousemove', mouseMove);

@@ -66,7 +66,7 @@ class Ball extends Paddle {
               ballT = this.posY,
               ballB = this.posY + this.height;
 
-        for(let i = 0; i < collisionObj.length; i++) {
+        for(let i in collisionObj) {
             let objL = collisionObj[i].posX,
                 objR = collisionObj[i].posX + collisionObj[i].width,
                 objT = collisionObj[i].posY,
@@ -191,12 +191,6 @@ collisionObj.push(playerPaddle, computerPaddle, ball);
 
 const mouseMove = ev => {
     playerPaddle.posY = ev.clientY - playerPaddle.height;
-    // if(playerPaddle.posY < 0) {
-    //     playerPaddle.posY = 0
-    // }
-    // if(playerPaddle.posY > cnv.height - playerPaddle.height) {
-    //     playerPaddle.posY = cnv.height - playerPaddle.height
-    // }
 }
 
 const computerMove = (balls) => {
@@ -204,7 +198,7 @@ const computerMove = (balls) => {
         minEl,
         tmpX;
 
-    for(let i=0; i<balls.length; i++) {
+    for(let i in balls) {
         tmpX = computerPaddle.posX - balls[i].posX;
         if(tmpX < minX) {
             minX = tmpX;
